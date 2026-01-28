@@ -1,0 +1,9 @@
+path: ~/dev/yolov9-lora/data/processed/road_signs
+train: images/train
+val: images/val
+
+# Number of classes
+# nc: 10
+
+# Check to match class_ids
+names: ['stop', 'speed_limit_60', 'yield', 'pedestrian_crossing', 'no_entry', 'turn_right', 'turn_left', 'roundabout', 'warning', 'other']
