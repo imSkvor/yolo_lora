@@ -1,0 +1,38 @@
+# Data - NEVER commit raw or processed datasets to Git
+data/raw/
+data/processed/
+*.jpg
+*.png
+*.jpeg
+# *.txt
+
+# Models - Original weights and large checkpoints
+models/official_yolov9/weights/*.pt
+experiments/*/weights/*.pt
+!experiments/*/weights/best.pt  # Consider keeping only the best checkpoint
+
+# Python and Environment
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+.env
+*.egg-info/
+dist/
+build/
+
+# IDE and OS files
+.vscode/
+
+# Experiment logs and outputs
+experiments/*/logs/
+*.log
+wandb/
+mlruns/
+
+# Configuration overrides
+configs/local_*.yaml
