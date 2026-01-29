@@ -1,6 +1,5 @@
-from typing import Optional, Union
+from typing import Optional
 import copy
-import torch
 import torch.nn as nn
 from models.conv_lora import CoLoRALayer
 
