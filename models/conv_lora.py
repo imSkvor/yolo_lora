@@ -60,8 +60,8 @@ class CoLoRALayer(nn.Module):
     @property
     def weight(self) -> Tensor:
         with torch.no_grad():
-            pw_weight: Tensor = self.lora_pointwise.weight
-            lw_weight: Tensor = self.lora_layerwise.weight
+            pw_weight: Tensor = self.lora_pointwise.weight # [out_channels, in_channels, 1, 1]
+            lw_weight: Tensor = self.lora_layerwise.weight # [out_channels, 1, kernel_h, kernel_w]
 
             combined: Tensor = self.scaling * lw_weight * pw_weight
             return self.original_conv.weight + combined
