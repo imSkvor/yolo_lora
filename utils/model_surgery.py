@@ -58,7 +58,7 @@ def apply_colora_to_model(
     _process_module(model)
     return change_count, converted_names
 
-def get_trainable_parametrs(model: nn.Module) -> tuple[int, int, float]:
+def get_trainable_parameters(model: nn.Module) -> tuple[int, int, float]:
     """Return a tuple (total_params, trainable_params, trainable_percentage)"""
     total_params: int = sum(p.numel() for p in model.parameters())
     trainable_params: int = sum(p.numel() for p in model.parameters() if p.requires_grad)
