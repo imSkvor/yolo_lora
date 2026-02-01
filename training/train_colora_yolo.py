@@ -21,16 +21,6 @@ import numpy as np
 import yaml
 from tqdm import tqdm
 
-# Adds project's root sys.path
-sys.path.insert(0, str(Path(__file__).parent.parent))
-
-# Local imports
-from models.conv_lora import CoLoRALayer
-from utils.model_surgery import apply_colora_to_model, get_trainable_parameters
-from utils.model_merge import merge_colora_model
-from utils.gpu_logger import GPUMemoryLogger
-
-
 # Add YOLOv9 to path
 sys.path.insert(0, str(Path(__file__).parent.parent / "models" / "official_yolov9"))
 
@@ -65,6 +55,15 @@ from utils.loggers import Loggers
 from models.experimental import attempt_load
 from models.yolo import Model
 import val as validate
+
+# Adds project's root sys.path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+# Local imports
+from models.conv_lora import CoLoRALayer
+from utils.model_surgery import apply_colora_to_model, get_trainable_parameters
+from utils.model_merge import merge_colora_model
+from utils.gpu_logger import GPUMemoryLogger
 
 
 class CoLoRATrainer:

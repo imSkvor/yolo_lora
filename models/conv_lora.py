@@ -5,7 +5,7 @@ from torch import Tensor
 from typing import Optional
 
 class CoLoRALayer(nn.Module):
-    """
+    r"""
     CoLoRA decomposes weight update into pointwise (1 x 1 x C) and layerwise (h x w x 1) components.
     W = W_original + \delta W, where \delta W = pointwise_conv \circ layerwise_conv.
     It finetunes by learning low-rank \delta W convolution kernels.
