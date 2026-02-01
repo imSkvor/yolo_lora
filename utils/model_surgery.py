@@ -6,7 +6,7 @@ def apply_colora_to_model(
     model: nn.Module,
     target_layers: Optional[list[str]] = None,
     rank: int = 4,
-) -> tuple(int, list[str]):
+) -> tuple[int, list[str]]:
     """
     Recursively replace Conv2d layers with CoLoRALayer
     

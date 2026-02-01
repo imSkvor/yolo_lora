@@ -18,7 +18,7 @@ class CoLoRALayer(nn.Module):
         self.alpha = alpha
 
         for param in self.original_conv.parameters():
-            param.requres_grad = False # freezeing original weights
+            param.requires_grad = False # freezeing original weights
         
         in_channels = original_conv.in_channels
         out_channels = original_conv.out_channels
