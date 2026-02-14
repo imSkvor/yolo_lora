@@ -1,0 +1,8 @@
+Converted layers: 0
+Target layers: ['backbone', 'neck']
+Rank: 4
+Total params: 32832194
+Trainable params: 32832162
+Trainable percentage: 100.00%
+
+Converted layer names:

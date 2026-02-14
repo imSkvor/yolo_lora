@@ -1,7 +1,7 @@
 from typing import Optional
 import copy
 import torch.nn as nn
-from models.conv_lora import CoLoRALayer
+from lora_models.conv_lora import CoLoRALayer
 
 
 def merge_colora_layer(layer: nn.Module) -> Optional[nn.Conv2d]:
@@ -15,7 +15,7 @@ def merge_colora_model(
     inplace: bool = False,
     verbose: bool = False
 ) -> nn.Module:
-    """Recursively merges all CoLoRALayers in a model into standard Conv2d layers"""
+    """Recursively merges all CoLoRALayers in a model into standzsard Conv2d layers"""
 
     model_to_modify = model if inplace else copy.deepcopy(model)
     merge_count: int = 0

@@ -1,0 +1,23 @@
+data: data/raw/signs_europe_5k/data.yaml
+weights: lora_models/official_yolov9/weights/yolov9-m.pt
+cfg: lora_models/official_yolov9/models/detect/yolov9-m.yaml
+hyp: lora_models/official_yolov9/data/hyps/hyp.scratch-high.yaml
+epochs: 200
+batch_size: 8
+imgsz: 640
+device: '0'
+workers: 8
+optimizer: AdamW
+lora_rank: 4
+lora_lr: 0.001
+head_lr: 0.0001
+target_layers:
+- backbone
+- neck
+project: experiments/colora-experiments
+name: yolov9m_colora_bs8_rank4
+exist_ok: true
+cos_lr: false
+patience: 100
+save_period: -1
+image_weights: false

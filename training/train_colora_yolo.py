@@ -21,8 +21,9 @@ import numpy as np
 import yaml
 from tqdm import tqdm
 
-# Add YOLOv9 to path
-sys.path.insert(0, str(Path(__file__).parent.parent / "models" / "official_yolov9"))
+# adds both root and root/lora_models/official_yolov9 to sys.path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+sys.path.insert(0, str(Path(__file__).parent.parent / "lora_models" / "official_yolov9"))
 
 # YOLOv9 imports
 from utils.general import (
@@ -56,14 +57,12 @@ from models.experimental import attempt_load
 from models.yolo import Model
 import val as validate
 
-# Adds project's root sys.path
-sys.path.insert(0, str(Path(__file__).parent.parent))
 
 # Local imports
-from models.conv_lora import CoLoRALayer
-from utils.model_surgery import apply_colora_to_model, get_trainable_parameters
-from utils.model_merge import merge_colora_model
-from utils.gpu_logger import GPUMemoryLogger
+from lora_models.conv_lora import CoLoRALayer
+from lora_utils.model_surgery import apply_colora_to_model, get_trainable_parameters
+from lora_utils.model_merge import merge_colora_model
+from lora_utils.gpu_logger import GPUMemoryLogger
 
 
 class CoLoRATrainer:
@@ -244,8 +243,8 @@ class CoLoRATrainer:
             prefix = colorstr("val: "),
         )[0]
         
-        labels = np.concatenate(self.dataset.labels, 0)
-        self.model.class_weights = labels_to_class_weights(labels, self.model.nc).to(self.device)
+        # labels = np.concatenate(self.dataset.labels, 0)
+        self.model.class_weights = labels_to_class_weights(self.dataset.labels, self.model.nc).to(self.device)
         
         return self.train_loader, self.val_loader
     
@@ -299,7 +298,7 @@ class CoLoRATrainer:
             )
         
         self.ema = ModelEMA(self.model)
-        self.scaler = torch.cuda.amp.GradScaler(enabled = True)
+        self.scaler = torch.amp.GradScaler("cuda", enabled = True)
         
         if self.config.get("cos_lr", False):
             lf = one_cycle(1, self.hyp["lrf"], self.epochs)
@@ -308,6 +307,7 @@ class CoLoRATrainer:
                 return (1 - x / self.epochs) * (1.0 - self.hyp["lrf"]) + self.hyp["lrf"]
         
         self.scheduler = torch.optim.lr_scheduler.LambdaLR(self.optimizer, lr_lambda = lf)
+        self.lf = lf
 
         self.compute_loss = ComputeLoss(self.model)
         
@@ -348,7 +348,7 @@ class CoLoRATrainer:
             # Forward
             imgs = imgs.to(self.device, non_blocking = True).float() / 255
             
-            with torch.cuda.amp.autocast(enabled = True):
+            with torch.amp.autocast("cuda", enabled = True):
                 pred = self.model(imgs)
                 loss, loss_items = self.compute_loss(pred, targets.to(self.device))
             

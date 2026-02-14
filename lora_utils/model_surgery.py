@@ -1,6 +1,6 @@
 from typing import Optional
 import torch.nn as nn
-from models.conv_lora import CoLoRALayer
+from lora_models.conv_lora import CoLoRALayer
 
 def apply_colora_to_model(
     model: nn.Module,

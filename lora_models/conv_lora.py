@@ -117,3 +117,54 @@ class CoLoRALayer(nn.Module):
 
     def extra_repr(self) -> str:
         return f"{self.rank=}, {self.alpha=}, {self.original_conv=}"
+
+
+class CoLoRAConv(nn.Module):
+    """
+    This is YOLOv9's Conv module with nn.Conv2d replaced by CoLoRALayer.
+    Maintains the same API as YOLOv9's Conv class.
+    """
+
+    default_act = nn.SiLU() # YOLO's default
+
+    def __init__(
+        self,
+        original_conv: nn.Module, # original YOLO's Conv
+        rank: int = 4,
+        alpha: int = 8
+    ) -> None:
+        super().__init__()
+
+        # this results in original.conv being stored multiple times? they are either way small, but...
+        self.original_conv = original_conv
+        self.colora_conv = CoLoRALayer(original_conv.conv, rank = rank, alpha = alpha)
+
+        self.bn = original_conv.bn
+        self.act = original_conv.act
+
+        for param in self.original_conv.parameters():
+            param.requires_grad = False
+
+        for param in self.colora_conv.parameters():
+            param.requires_grad = True
+
+
+    def forward(self, x: Tensor) -> Tensor:
+        return self.act(self.bn(self.colora_conv(x)))
+
+
+    def forward_fuse(self, x: Tensor) -> Tensor:
+        return self.act(self.colora_conv(x))
+
+    
+    @property
+    def conv(self) -> nn.Module:
+        return self.colora_conv
+    
+
+    def extra_repr(self) -> str:
+        return (f"CoLoRAConv(rank={self.colora_conv.rank}, "
+                f"alpha={self.colora_conv.alpha}, "
+                f"original={self.original_conv})")
+
+        

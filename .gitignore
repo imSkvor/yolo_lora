@@ -10,6 +10,7 @@ data/processed/
 models/official_yolov9
 models/official_yolov9/weights/*.pt
 experiments/*/weights/*.pt
+experiments/*/*/*/weights/*.pt
 !experiments/*/weights/best.pt  # Consider keeping only the best checkpoint
 
 # Python and Environment
